@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package = "com.example.ejemplodedatastore";
+option java_multiple_files = true;
+
+message AppStatsProto {
+  int32 open_count = 1;
+  int64 last_opened_timestamp = 2;
+}
