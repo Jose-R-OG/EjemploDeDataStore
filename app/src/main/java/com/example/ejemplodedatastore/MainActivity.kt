@@ -16,12 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -30,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -52,6 +51,7 @@ class MainActivity : ComponentActivity() {
             EjemploDeDataStoreTheme {
                 val viewModel: MainActivityViewModel = hiltViewModel()
                 val state by viewModel.state.collectAsState()
+
                 AppStatsScreen(
                     state = state,
                     onRecordOpen = { viewModel.processIntent(MainActivityEvents.RecordAppOpen) }
@@ -68,6 +68,11 @@ fun AppStatsScreen(
     onRecordOpen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Este bloque se ejecuta automáticamente una sola vez cuando la pantalla se crea
+    LaunchedEffect(Unit) {
+        onRecordOpen()
+    }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -77,14 +82,8 @@ fun AppStatsScreen(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
             )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text("Registrar apertura") },
-                icon = { Icon(Icons.Filled.TouchApp, contentDescription = null) },
-                onClick = onRecordOpen
-            )
         }
+        // Se eliminó el floatingActionButton porque el registro ahora es automático
     ) { innerPadding ->
         Box(
             modifier = Modifier
